@@ -57,6 +57,11 @@ node ('docker-build') {
     
 node ('swarm-deploy') {
 
+    stage ('Checkout the Deployment Scripts') {
+      checkout scm
+      // sh "git submodule update --init"
+    }
+
     stage ('Download Application Bundle') {
       sh "curl -k -u demouser:73pass76  https://52.53.183.20/artifactory/agileclouds/${env.JOB_NAME}.dab -o ${env.JOB_NAME}.dab"
     }
