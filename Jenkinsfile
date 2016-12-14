@@ -1,4 +1,4 @@
-node ('swarm') {
+node ('docker-build') {
     stage "Checkout Deployment Architecture and Operations Source"
     checkout scm
     // sh "git submodule update --init"
@@ -46,12 +46,12 @@ node ('swarm') {
     sh "docker run --rm -v `pwd`:/data mikeagileclouds/dabmerger --out /data/${env.JOB_NAME}.dab /data/${env.JOB_NAME}_infra.dab /data/${env.DEVPROJCOMPOSEDIR}/${env.JOB_NAME}_app.dab"
     
     stage "Upload Application Bundle"
-    echo 'Place holder for DAB file push'
-   // sh "curl -u admin:73admin79 -X PUT http://169.55.59.106:8080/artifactory/ext-release-local/${env.JOB_NAME}.dab -T ${env.JOB_NAME}.dab"
+    sh "curl -k -u demouser:73pass76 -X PUT https://52.53.183.20/artifactory/agileclouds/${env.JOB_NAME}.dab -T ${env.JOB_NAME}.dab"
+}
     
+node ('swarm-deploy') {
     stage "Download Application Bundle"
-    echo 'Place holder for DAB file push'
-    // sh "curl -u admin:73admin79 -X PUT http://169.55.59.106:8080/artifactory/ext-release-local/${env.JOB_NAME}.dab -o ${env.JOB_NAME}.dab"
+    sh "curl -k -u demouser:73pass76  https://52.53.183.20/artifactory/agileclouds/${env.JOB_NAME}.dab -o ${env.JOB_NAME}.dab"
     
     stage "Deploy Docker App Bundle"
     sh "docker stack deploy ${env.JOB_NAME}" // deploy create as well as update stack - ?Does note seem to be working?
