@@ -51,7 +51,7 @@ node ('docker-build') {
     }
  
     stage ('Upload Application Bundle') {
-      sh "curl -k -u demouser:73pass76 -X PUT https://52.53.183.20/artifactory/agileclouds/${env.JOB_NAME}.dab -T ${env.JOB_NAME}.dab"
+      sh "curl -k -u ${env.ARTIFACTORY_USER}:${env.ARTIFACTORY_PASSWORD} -X PUT ${ARTIFACTORY_URL}/${env.JOB_NAME}.dab -T ${env.JOB_NAME}.dab"
     }
 }
     
@@ -63,7 +63,7 @@ node ('swarm-deploy') {
     }
 
     stage ('Download Application Bundle') {
-      sh "curl -k -u demouser:73pass76  https://52.53.183.20/artifactory/agileclouds/${env.JOB_NAME}.dab -o ${env.JOB_NAME}.dab"
+      sh "curl -k -u ${env.ARTIFACTORY_USER}:${env.ARTIFACTORY_PASSWORD}  ${ARTIFACTORY_URL}/${env.JOB_NAME}.dab -o ${env.JOB_NAME}.dab"
     }
     
     stage ('Clear running services') {
