@@ -68,7 +68,7 @@ node ('swarm-deploy') {
     
     stage ('Clear running services') {
       // NOTE: this is a temporary workaround for port clashing 
-      sh "docker service  ls -q | (xargs sudo docker service rm || echo )"
+      sh "docker service  ls -q | (xargs docker service rm || echo )"
     }
     
     stage ('Deploy Docker App Bundle') {
